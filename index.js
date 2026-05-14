@@ -1,13 +1,16 @@
 require('dotenv').config();
 
-const { Client, GatewayIntentBits } = require('discord.js');
+const {
+    Client,
+    GatewayIntentBits
+} = require('discord.js');
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMembers
+        GatewayIntentBits.MessageContent
     ]
 });
 
@@ -17,23 +20,60 @@ client.once('ready', () => {
 
 client.on('guildMemberAdd', async (member) => {
 
-    const welcomeChannel = member.guild.channels.cache.find(
-       ch => ch.name === '》beszélgetés《'
+    // Rangok
+    const belepoRole = member.guild.roles.cache.find(
+        role => role.name === 'Belépő'
     );
 
-    if (!welcomeChannel) return;
+    const tagRole = member.guild.roles.cache.find(
+        role => role.name === 'Tag'
+    );
 
-    welcomeChannel.send(`
-👋 Üdv a szerveren!
+    // Szoba
+    const beszelgetesChannel = member.guild.channels.cache.find(
+        ch => ch.name === '💬》beszélgetés《'
+    );
 
-📝 A Neved elé másold be, hogy: ZEN
-Ezt #csapatról szobában megtalálod.
+    // Belépő rang adása
+    if (belepoRole) {
+        await member.roles.add(belepoRole);
+    }
 
-🚗 Ezután az ID-d és a neved küldd be a #nevek-id szobába.
+    // 2 perc várakozás
+    setTimeout(async () => {
 
-❗ Fontos kérdés még:
-Langyifagyi vagy-e? 😄
+        // Belépő rang levétele
+        if (belepoRole) {
+            await member.roles.remove(belepoRole);
+        }
+
+        // Tag rang adása
+        if (tagRole) {
+            await member.roles.add(tagRole);
+        }
+
+        // Üdvözlés
+        if (beszelgetesChannel) {
+
+            beszelgetesChannel.send(`
+👋 Üdv a szerveren ${member}!
+
+👥 A #👥csapatról szobában megtalálod a logónkat.
+Másold ki és másold be a neved elé játékban és Discordon is!
+
+⚠️ Fontos:
+Ugyanaz legyen a neved játékban mint Discordon!
+
+📸 Készíts képernyőképet és küldd be az ID-ddel együtt a
+#🆔nevek-id
+szobába!
+
+Köszönöm! ❤️
 `);
+        }
+
+    }, 120000); // 2 perc
+
 });
 
 client.on('messageCreate', message => {
