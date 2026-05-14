@@ -76,16 +76,6 @@ Köszönöm! ❤️
 
 });
 
-client.on('messageCreate', message => {
-
-    if (message.author.bot) return;
-
-    if (message.content === '!help') {
-        message.reply('A bot működik! ✅');
-    }
-});
-
-client.login(process.env.TOKEN);
 client.on("messageCreate", message => {
     if (message.author.bot) return;
 
@@ -93,3 +83,5 @@ client.on("messageCreate", message => {
         message.reply("A bot működik! ✅");
     }
 });
+
+client.login(process.env.TOKEN);
