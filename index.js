@@ -86,3 +86,10 @@ client.on('messageCreate', message => {
 });
 
 client.login(process.env.TOKEN);
+client.on("messageCreate", message => {
+    if (message.author.bot) return;
+
+    if (message.content === "!help") {
+        message.reply("A bot működik! ✅");
+    }
+});
