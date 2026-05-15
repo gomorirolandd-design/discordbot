@@ -3,7 +3,7 @@ const app = express();
 
 app.get("/", (req, res) => {
   res.send("Bot működik!");
-}):
+});
 
 
 app.listen(process.env.PORT || 3000, () => {
