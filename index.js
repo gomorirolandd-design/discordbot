@@ -92,7 +92,7 @@ client.on("messageCreate", message => {
 
     if (message.content === "!help") {
         message.reply("A bot működik! ✅");
-    }}
+    }
 if (message.content === "!útmutató") {
     message.reply(`
 👥 A #👥csapatról szobában megtalálod a logónkat.
@@ -107,6 +107,7 @@ szobába!
 
 Köszönöm! ❤️
 `);
+}
 });
 
 client.login(process.env.TOKEN);
