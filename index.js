@@ -3,7 +3,8 @@ const app = express();
 
 app.get("/", (req, res) => {
   res.send("Bot működik!");
-});
+}):
+
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Webserver elindult");
@@ -91,7 +92,21 @@ client.on("messageCreate", message => {
 
     if (message.content === "!help") {
         message.reply("A bot működik! ✅");
-    }
+    }}
+if (message.content === "!útmutató") {
+    message.reply(`
+👥 A #👥csapatról szobában megtalálod a logónkat.
+Másold ki és másold be a neved elé játékban és Discordon is!
+
+⚠️ Fontos:
+Ugyanaz legyen a neved játékban mint Discordon!
+
+📸 Készíts képernyőképet és küldd be az ID-ddel együtt a
+#🆔nevek-id
+szobába!
+
+Köszönöm! ❤️
+`);
 });
 
 client.login(process.env.TOKEN);
