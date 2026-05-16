@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-cron.schedule('35 20 * * *', async () => {
+cron.schedule('45 18 * * *', async () => {
 
     const channel = client.channels.cache.find(
         ch => ch.name === '💬》beszélgetés《'
