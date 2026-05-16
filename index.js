@@ -9,7 +9,7 @@ cron.schedule('0 13 * * *', async () => {
         channel.send(`
 🏁 Blacklist verseny információk
 
-A versenyeket a #🚗-drift szobában találjátok. Az 1v1 győzelem 1 pontot ér, vereségért nem jár pont. Ha valaki pontot szerez és nincs jelen vezető, írjatok egy adminnak/moderátornak vagy a <#1504590025638285352> szobába.
+A versenyeket a <#1503890047055696082> szobában találjátok. Az 1v1 győzelem 1 pontot ér, vereségért nem jár pont.
 
 A blacklistes játékosok hetente csak 1 embert hívhatnak ki a pontfarmolás elkerülése miatt. A verseny lehet gyorsasági vagy DP alapú, és mindig jelen kell lennie legalább 1 vezetőnek/adminnak/moderátornak.
 ❗ Ha nincs jelen vezető/admin/moderátor, akkor nem indulhat 1v1 verseny.
