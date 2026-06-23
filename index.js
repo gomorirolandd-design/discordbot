@@ -17,7 +17,26 @@ A blacklistes játékosok hetente csak 1 embert hívhatnak ki a pontfarmolás el
 ‼️ Ide ne írjatok. Sok sikert mindenkinek! 🫡
 `);
     }
+});
+cron.schedule('0 16 * * *', async () => {
+    const channel = client.channels.cache.find(
+        ch => ch.name === '💭》beszélgetés《'
+    );
 
+    if (channel) {
+        channel.send(`
+📢 **3 hetes verseny emlékeztető!**
+
+Ne feledjétek a 3 hetes célkitűzéses versenyt! 🔥
+
+Tessék mindenkinek gyakorolni, vasárnap délután 15:00-tól alapító/vezető, admin vagy moderátor jelenlétében kerül sor a verseny lebonyolítására.
+
+ℹ️ További információ:
+<#1504078814882566194>
+
+Sok sikert mindenkinek! 🚗💨
+`);
+    }
 });
 const express = require("express");
 const app = express();
