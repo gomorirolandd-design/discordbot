@@ -1,39 +1,71 @@
-const cron = require('node-cron');
-cron.schedule('0 13 * * *', async () => {
+const express = require("express");
+const app = express();
 
-    const channel = client.channels.cache.find(
-        ch => ch.name === '💬》beszélgetés《'
-    );
+require("dotenv").config();
 
-    if (channel) {
-        channel.send(`
+const {
+Client,
+GatewayIntentBits
+} = require("discord.js");
+
+const cron = require("node-cron");
+
+const client = new Client({
+intents: [
+GatewayIntentBits.Guilds,
+GatewayIntentBits.GuildMembers,
+GatewayIntentBits.GuildMessages,
+GatewayIntentBits.MessageContent
+]
+});
+
+app.get("/", (req, res) => {
+res.send("Bot működik!");
+});
+
+app.listen(process.env.PORT || 3000, () => {
+console.log("Webserver elindult");
+});
+
+client.once("ready", () => {
+console.log(`${client.user.tag} elindult!`);
+});
+
+// Blacklist verseny információk minden nap 13:00
+cron.schedule("0 13 * * *", async () => {
+const channel = client.channels.cache.find(
+ch => ch.name === "💬》beszélgetés《"
+);
+
+```
+if (!channel) return;
+
+await channel.send(`
+```
+
 🏁 Blacklist verseny információk
 
 A versenyeket a <#1503890047055696082> szobában találjátok. Az 1v1 győzelem 1 pontot ér, vereségért nem jár pont.
 
 A blacklistes játékosok hetente csak 1 embert hívhatnak ki a pontfarmolás elkerülése miatt. A verseny lehet gyorsasági vagy DP alapú, és mindig jelen kell lennie legalább 1 vezetőnek/adminnak/moderátornak.
+
 ❗ Ha nincs jelen vezető/admin/moderátor, akkor nem indulhat 1v1 verseny.
 
 ‼️ Ide ne írjatok. Sok sikert mindenkinek! 🫡
 `);
-    }
 });
-console.log("CRON 19 ORARA ALLITVA");
-cron.schedule('0 19 * * *', async () => {
-    console.log("CRON ELINDULT!");
 
-    if (!client.isReady()) {
-        console.log("BOT MÉG NEM READY");
-        return;
-    }
+// 3 hetes verseny emlékeztető minden nap 19:00
+cron.schedule("0 19 * * *", async () => {
+try {
+const channel = await client.channels.fetch("1503883659189424253");
 
-    try {
-        const channel = client.channels.cache.get("1503883659189424253");
+```
+    if (!channel) return;
 
-        console.log(channel ? "MEGTALÁLTAM A CSATORNÁT" : "NEM TALÁLOM A CSATORNÁT");
+    await channel.send(`
+```
 
-        if (channel) {
-            await channel.send(`
 📢 **3 hetes verseny emlékeztető!**
 
 Ne feledjétek a 3 hetes célkitűzéses versenyt! 🔥
@@ -45,72 +77,42 @@ Tessék mindenkinek gyakorolni, vasárnap délután 15:00-tól alapító/vezető
 
 Sok sikert mindenkinek! 🚗💨
 `);
-        }
 } catch (err) {
-    console.error("CRON HIBA:", err);
+console.error("CRON HIBA:", err);
 }
 });
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Webserver elindult");
-});
-require('dotenv').config();
 
-const {
-    Client,
-    GatewayIntentBits
-} = require('discord.js');
+client.on("guildMemberAdd", async (member) => {
+const belepoRole = member.guild.roles.cache.find(
+role => role.name === "Belépő"
+);
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMembers,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
-});
+```
+const tagRole = member.guild.roles.cache.find(
+    role => role.name === "Tag"
+);
 
-client.once('ready', () => {
-    console.log(`${client.user.tag} elindult!`);
-});
+const beszelgetesChannel = member.guild.channels.cache.find(
+    ch => ch.name === "💬》beszélgetés《"
+);
 
-client.on('guildMemberAdd', async (member) => {
+if (belepoRole) {
+    await member.roles.add(belepoRole);
+}
 
-    // Rangok
-    const belepoRole = member.guild.roles.cache.find(
-        role => role.name === 'Belépő'
-    );
-
-    const tagRole = member.guild.roles.cache.find(
-        role => role.name === 'Tag'
-    );
-
-    // Szoba
-    const beszelgetesChannel = member.guild.channels.cache.find(
-        ch => ch.name === '💬》beszélgetés《'
-    );
-
-    // Belépő rang adása
+setTimeout(async () => {
     if (belepoRole) {
-        await member.roles.add(belepoRole);
+        await member.roles.remove(belepoRole);
     }
 
-    // 2 perc várakozás
-    setTimeout(async () => {
+    if (tagRole) {
+        await member.roles.add(tagRole);
+    }
 
-        // Belépő rang levétele
-        if (belepoRole) {
-            await member.roles.remove(belepoRole);
-        }
+    if (beszelgetesChannel) {
+        await beszelgetesChannel.send(`
+```
 
-        // Tag rang adása
-        if (tagRole) {
-            await member.roles.add(tagRole);
-        }
-
-        // Üdvözlés
-        if (beszelgetesChannel) {
-
-            beszelgetesChannel.send(`
 👋 Üdv a szerveren ${member}!
 
 👥 A #👥csapatról szobában megtalálod a logónkat.
@@ -125,20 +127,22 @@ szobába!
 
 Köszönöm! ❤️
 `);
-        }
-
-    }, 120000); // 2 perc
-
+}
+}, 120000);
 });
 
 client.on("messageCreate", message => {
-    if (message.author.bot) return;
+if (message.author.bot) return;
 
-    if (message.content === "!help") {
-        message.reply("A bot működik! ✅");
-    }
+```
+if (message.content === "!help") {
+    return message.reply("A bot működik! ✅");
+}
+
 if (message.content === "!útmutató") {
-    message.reply(`
+    return message.reply(`
+```
+
 👥 A #👥csapatról szobában megtalálod a logónkat.
 Másold ki és másold be a neved elé játékban és Discordon is!
 
