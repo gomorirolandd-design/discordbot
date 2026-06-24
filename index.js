@@ -21,12 +21,12 @@ A blacklistes játékosok hetente csak 1 embert hívhatnak ki a pontfarmolás el
 cron.schedule('* * * * *', async () => {
     console.log("CRON ELINDULT!");
 
-    const channel = await client.channels.fetch("1503883659189424253");
+    try {
+        const channel = await client.channels.fetch("1503883659189424253");
 
-    console.log(channel ? "MEGTALÁLTAM A CSATORNÁT" : "NEM TALÁLOM A CSATORNÁT");
+        console.log("MEGTALÁLTAM A CSATORNÁT");
 
-    if (channel) {
-        channel.send(`
+        await channel.send(`
 📢 **3 hetes verseny emlékeztető!**
 
 Ne feledjétek a 3 hetes célkitűzéses versenyt! 🔥
@@ -38,6 +38,8 @@ Tessék mindenkinek gyakorolni, vasárnap délután 15:00-tól alapító/vezető
 
 Sok sikert mindenkinek! 🚗💨
 `);
+    } catch (err) {
+        console.error("CRON HIBA:", err);
     }
 });
 const express = require("express");
