@@ -19,7 +19,11 @@ A blacklistes játékosok hetente csak 1 embert hívhatnak ki a pontfarmolás el
     }
 });
 cron.schedule('50 20 * * *', async () => {
-    const channel = client.channels.cache.get("1503883659189424253");    
+    console.log("CRON ELINDULT!");
+
+    const channel = client.channels.cache.get("1503883659189424253");
+
+    console.log(channel ? "MEGTALÁLTAM A CSATORNÁT" : "NEM TALÁLOM A CSATORNÁT");
 
     if (channel) {
         channel.send(`
