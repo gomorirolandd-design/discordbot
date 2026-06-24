@@ -18,7 +18,7 @@ A blacklistes játékosok hetente csak 1 embert hívhatnak ki a pontfarmolás el
 `);
     }
 });
-cron.schedule('* * * * *', async () => {
+cron.schedule('0 19 * * *', async () => {
     console.log("CRON ELINDULT!");
 
     if (!client.isReady()) {
