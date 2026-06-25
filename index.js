@@ -49,7 +49,7 @@ A blacklistes játékosok hetente csak 1 embert hívhatnak ki a pontfarmolás el
 });
 
 // 3 hetes verseny emlékeztető minden nap 19:00
-cron.schedule("0 19 * * *", async () => {
+cron.schedule("0 16 * * *", async () => {
     try {
         const channel = await client.channels.fetch("1503883659189424253");
 
